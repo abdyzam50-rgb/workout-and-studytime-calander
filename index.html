@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#12131a">
+<title>Focus &amp; Lift — Study and Workout Timers</title>
+<meta name="description" content="Pomodoro-style study timers and interval workouts with a checklist after every set.">
+<link rel="stylesheet" href="styles.css">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon.svg">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⏱️</text></svg>">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-mark" aria-hidden="true">⏱</span>
+    <span class="brand-name">Focus &amp; Lift</span>
+  </div>
+  <nav class="tabs" role="tablist" aria-label="Sections">
+    <button class="tab" role="tab" data-view="study" aria-selected="true">Study</button>
+    <button class="tab" role="tab" data-view="workout" aria-selected="false">Workout</button>
+    <button class="tab" role="tab" data-view="calendar" aria-selected="false">Calendar</button>
+    <button class="tab" role="tab" data-view="settings" aria-selected="false">Settings</button>
+  </nav>
+  <button id="theme-toggle" class="icon-btn" title="Toggle light / dark theme" aria-label="Toggle theme">◐</button>
+</header>
+
+<main>
+
+<!-- ══════════════════════════ STUDY ══════════════════════════ -->
+<section id="view-study" class="view is-active" data-accent="study">
+  <div class="stage">
+    <div class="phase-pills" id="study-phases">
+      <button class="pill is-active" data-phase="focus">Focus</button>
+      <button class="pill" data-phase="short">Short break</button>
+      <button class="pill" data-phase="long">Long break</button>
+    </div>
+
+    <div class="dial">
+      <svg viewBox="0 0 240 240" class="ring" aria-hidden="true">
+        <circle class="ring-track" cx="120" cy="120" r="108"></circle>
+        <circle class="ring-fill" id="study-ring" cx="120" cy="120" r="108"></circle>
+      </svg>
+      <div class="dial-face">
+        <div class="clock" id="study-clock" role="timer" aria-live="off">25:00</div>
+        <div class="dial-sub" id="study-status">Ready to focus</div>
+      </div>
+    </div>
+
+    <label class="subject-field">
+      <span class="sr-only">What are you studying?</span>
+      <input id="study-subject" type="text" placeholder="What are you working on? (e.g. Chemistry — Ch. 7)" maxlength="80">
+    </label>
+
+    <div class="controls">
+      <button id="study-start" class="btn btn-primary btn-lg">Start</button>
+      <button id="study-skip" class="btn">Skip phase</button>
+      <button id="study-reset" class="btn btn-ghost">Reset</button>
+    </div>
+
+    <div class="cycle-row">
+      <div class="cycle-dots" id="study-dots" aria-label="Sessions until long break"></div>
+      <p class="hint">Session <b id="study-cycle">1</b> of <b id="study-cycle-total">4</b> · long break after the last one</p>
+    </div>
+
+    <div class="today-strip">
+      <div class="stat"><b id="study-today-min">0m</b><span>focused today</span></div>
+      <div class="stat"><b id="study-today-sessions">0</b><span>sessions today</span></div>
+      <div class="stat"><b id="study-streak">0</b><span>day streak</span></div>
+    </div>
+  </div>
+
+  <aside class="panel">
+    <h2>Timer lengths</h2>
+    <div class="field-grid">
+      <label>Focus <input id="cfg-focus" type="number" min="1" max="180" step="1"> min</label>
+      <label>Short break <input id="cfg-short" type="number" min="1" max="60" step="1"> min</label>
+      <label>Long break <input id="cfg-long" type="number" min="1" max="90" step="1"> min</label>
+      <label>Sessions before long break <input id="cfg-cycles" type="number" min="1" max="12" step="1"></label>
+    </div>
+    <label class="switch"><input id="cfg-autostart" type="checkbox"> <span>Auto-start the next phase</span></label>
+    <p class="hint">Presets:
+      <button class="chip" data-preset="25/5/15">25 · 5 · 15</button>
+      <button class="chip" data-preset="50/10/30">50 · 10 · 30</button>
+      <button class="chip" data-preset="90/20/30">90 · 20 · 30</button>
+    </p>
+
+    <h2>Recent study sessions</h2>
+    <ul class="log" id="study-log"><li class="empty">No sessions logged yet.</li></ul>
+  </aside>
+</section>
+
+<!-- ══════════════════════════ WORKOUT ══════════════════════════ -->
+<section id="view-workout" class="view" data-accent="workout">
+  <div class="stage">
+    <div class="workout-head">
+      <select id="workout-select" aria-label="Choose a workout"></select>
+      <button id="workout-edit" class="btn btn-sm">Edit</button>
+      <button id="workout-new" class="btn btn-sm">New</button>
+    </div>
+
+    <div class="dial">
+      <svg viewBox="0 0 240 240" class="ring" aria-hidden="true">
+        <circle class="ring-track" cx="120" cy="120" r="108"></circle>
+        <circle class="ring-fill" id="workout-ring" cx="120" cy="120" r="108"></circle>
+      </svg>
+      <div class="dial-face">
+        <div class="clock" id="workout-clock" role="timer" aria-live="off">00:00</div>
+        <div class="dial-sub" id="workout-status">Press start</div>
+      </div>
+    </div>
+
+    <div class="now-next">
+      <div class="now" id="workout-now">—</div>
+      <div class="next" id="workout-next"></div>
+    </div>
+
+    <div class="controls">
+      <button id="workout-start" class="btn btn-primary btn-lg">Start</button>
+      <button id="workout-skip" class="btn">Skip</button>
+      <button id="workout-reset" class="btn btn-ghost">Reset</button>
+    </div>
+
+    <!-- post-set checklist gate -->
+    <div class="checklist-card" id="set-checklist" hidden>
+      <div class="checklist-head">
+        <h2>Set complete — checklist</h2>
+        <span class="checklist-count" id="checklist-count">0 / 0</span>
+      </div>
+      <ul class="checks" id="checklist-items"></ul>
+      <div class="logline">
+        <label>Reps <input id="log-reps" type="number" min="0" max="999" inputmode="numeric" placeholder="—"></label>
+        <label>Weight <input id="log-weight" type="number" min="0" step="0.5" inputmode="decimal" placeholder="—"></label>
+        <label class="rpe">RPE <input id="log-rpe" type="number" min="1" max="10" step="1" placeholder="—"></label>
+      </div>
+      <button id="checklist-continue" class="btn btn-primary" disabled>Tick everything to continue</button>
+    </div>
+
+    <div class="progress-list" id="workout-progress"></div>
+  </div>
+
+  <aside class="panel">
+    <h2>Today</h2>
+    <div class="today-strip vertical">
+      <div class="stat"><b id="workout-today-sets">0</b><span>sets done today</span></div>
+      <div class="stat"><b id="workout-today-min">0m</b><span>time under the bar</span></div>
+    </div>
+    <h2>Recent workouts</h2>
+    <ul class="log" id="workout-log"><li class="empty">No workouts logged yet.</li></ul>
+  </aside>
+</section>
+
+<!-- ══════════════════════════ CALENDAR ══════════════════════════ -->
+<section id="view-calendar" class="view">
+  <div class="stage wide">
+    <div class="cal-head">
+      <button id="cal-prev" class="icon-btn" aria-label="Previous month">‹</button>
+      <h2 id="cal-title">Month</h2>
+      <button id="cal-next" class="icon-btn" aria-label="Next month">›</button>
+      <button id="cal-today" class="btn btn-sm">Today</button>
+    </div>
+    <div class="cal-grid" id="cal-grid"></div>
+    <div class="legend">
+      <span><i class="dot study"></i> study</span>
+      <span><i class="dot workout"></i> workout</span>
+    </div>
+    <div class="day-detail" id="cal-detail"><p class="empty">Pick a day to see what you did.</p></div>
+  </div>
+
+  <aside class="panel">
+    <h2>This week</h2>
+    <div class="today-strip vertical">
+      <div class="stat"><b id="wk-study">0m</b><span>studied</span></div>
+      <div class="stat"><b id="wk-workouts">0</b><span>workouts</span></div>
+      <div class="stat"><b id="wk-sets">0</b><span>sets</span></div>
+      <div class="stat"><b id="wk-streak">0</b><span>day streak</span></div>
+    </div>
+    <h2>All time</h2>
+    <div class="today-strip vertical">
+      <div class="stat"><b id="all-study">0h</b><span>total study</span></div>
+      <div class="stat"><b id="all-workouts">0</b><span>total workouts</span></div>
+    </div>
+  </aside>
+</section>
+
+<!-- ══════════════════════════ SETTINGS ══════════════════════════ -->
+<section id="view-settings" class="view">
+  <div class="stage wide">
+    <h2>Alerts</h2>
+    <label class="switch"><input id="cfg-sound" type="checkbox"> <span>Play a chime when a timer ends</span></label>
+    <label class="switch"><input id="cfg-notify" type="checkbox"> <span>Show desktop notifications</span></label>
+    <label class="switch"><input id="cfg-wakelock" type="checkbox"> <span>Keep the screen awake while a timer runs</span></label>
+
+    <h2>Default post-set checklist</h2>
+    <p class="hint">New workouts start with these items. Each workout can override them in the editor.</p>
+    <ul class="editable-list" id="default-checklist"></ul>
+    <div class="row">
+      <input id="default-checklist-input" type="text" placeholder="Add a checklist item…" maxlength="60">
+      <button id="default-checklist-add" class="btn btn-sm">Add</button>
+    </div>
+
+    <h2>Your data</h2>
+    <p class="hint">Everything lives in this browser's local storage. Nothing is uploaded anywhere.</p>
+    <div class="row">
+      <button id="data-export" class="btn btn-sm">Export JSON</button>
+      <button id="data-import" class="btn btn-sm">Import JSON</button>
+      <button id="data-clear" class="btn btn-sm btn-danger">Erase everything</button>
+      <input id="data-file" type="file" accept="application/json" hidden>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ══════════════════════════ WORKOUT EDITOR ══════════════════════════ -->
+<dialog id="editor" class="editor">
+  <form method="dialog" class="editor-form" id="editor-form">
+    <header class="editor-head">
+      <input id="ed-name" type="text" placeholder="Workout name" maxlength="60" required>
+      <button type="button" class="icon-btn" id="ed-close" aria-label="Close editor">✕</button>
+    </header>
+
+    <div class="editor-body">
+      <h3>Exercises</h3>
+      <div class="ex-list" id="ed-exercises"></div>
+      <button type="button" class="btn btn-sm" id="ed-add-ex">+ Add exercise</button>
+
+      <h3>Post-set checklist</h3>
+      <p class="hint">Shown after every single set. You have to tick each item before the next set starts.</p>
+      <ul class="editable-list" id="ed-checklist"></ul>
+      <div class="row">
+        <input id="ed-checklist-input" type="text" placeholder="Add a checklist item…" maxlength="60">
+        <button type="button" id="ed-checklist-add" class="btn btn-sm">Add</button>
+      </div>
+    </div>
+
+    <footer class="editor-foot">
+      <button type="button" class="btn btn-danger btn-sm" id="ed-delete">Delete workout</button>
+      <span class="spacer"></span>
+      <button type="button" class="btn" id="ed-cancel">Cancel</button>
+      <button type="button" class="btn btn-primary" id="ed-save">Save workout</button>
+    </footer>
+  </form>
+</dialog>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<script type="module" src="js/app.js"></script>
+</body>
+</html>
