@@ -35,6 +35,7 @@ export function initWorkout({ onSessionLogged = () => {} } = {}) {
     status: $('#workout-status'),
     now: $('#workout-now'),
     next: $('#workout-next'),
+    goal: $('#workout-goal'),
     start: $('#workout-start'),
     skip: $('#workout-skip'),
     reset: $('#workout-reset'),
@@ -295,6 +296,17 @@ const STAGE_TEXT = {
   done: 'Workout complete 🎉',
 };
 
+// The work clock is an upper bound, not a target: on rep work you finish your
+// reps and press this rather than standing around waiting for zero.
+const SKIP_TEXT = {
+  idle: 'Skip',
+  ready: 'Skip lead-in',
+  work: 'Set done →',
+  rest: 'Skip rest',
+  hold: 'Skip rest',
+  done: 'Skip',
+};
+
 function render() {
   const step = current();
   const idleMs = (Number(steps[0]?.exercise.workSec) || 0) * 1000;
@@ -310,9 +322,10 @@ function render() {
 
   dom.start.textContent =
     stage === 'idle' || stage === 'done' ? 'Start' : timer.running ? 'Pause' : 'Resume';
+  dom.skip.textContent = SKIP_TEXT[stage];
 
+  const workout = activeWorkout();
   if (stage === 'idle') {
-    const workout = activeWorkout();
     dom.now.textContent = workout ? workout.name : 'No workout yet';
     dom.next.textContent = workout
       ? `${steps.length} sets · about ${formatDuration(Math.max(1, plannedSeconds() / 60))}`
@@ -324,14 +337,19 @@ function render() {
     dom.now.textContent = `${step.exercise.name} · set ${step.setNum} of ${step.exercise.sets}`;
     const upcoming = steps[idx + 1];
     dom.next.textContent =
-      stage === 'work'
-        ? step.exercise.targetReps
-          ? `Target ${step.exercise.targetReps} reps`
-          : 'Give it everything'
+      stage === 'work' || stage === 'ready'
+        ? [step.exercise.targetReps ? `Target ${step.exercise.targetReps} reps` : null, step.exercise.cue]
+            .filter(Boolean)
+            .join(' — ') || 'Give it everything'
         : upcoming
           ? `Next: ${upcoming.exercise.name} · set ${upcoming.setNum}`
           : 'Last set — finish strong';
   }
+
+  // The stage's graduation rule is only useful before you start.
+  const goal = (stage === 'idle' || stage === 'done') && workout?.goal;
+  dom.goal.hidden = !goal;
+  if (goal) dom.goal.textContent = workout.goal;
 
   if (!dom.card.hidden) updateChecklistState();
   renderProgress();

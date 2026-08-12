@@ -1,29 +1,15 @@
 // Local-storage backed state. Everything the app knows lives in one JSON blob.
 
+import { programWorkouts } from './program.js';
+
 const KEY = 'focus-and-lift/v1';
 
 export const DEFAULT_CHECKLIST = [
-  'Logged reps and weight',
-  'Form felt solid',
-  'Breathing back to normal',
-  'Water',
+  'Logged the reps',
+  'Form held to the last rep',
+  'Nothing hurts that shouldn’t',
+  'Breathing back under control',
 ];
-
-function defaultWorkouts() {
-  return [
-    {
-      id: uid(),
-      name: 'Full body — starter',
-      checklist: [...DEFAULT_CHECKLIST],
-      exercises: [
-        { id: uid(), name: 'Goblet squat', sets: 3, workSec: 45, restSec: 75, targetReps: 10 },
-        { id: uid(), name: 'Push-ups', sets: 3, workSec: 40, restSec: 60, targetReps: 12 },
-        { id: uid(), name: 'Dumbbell row', sets: 3, workSec: 45, restSec: 75, targetReps: 10 },
-        { id: uid(), name: 'Plank', sets: 2, workSec: 60, restSec: 45, targetReps: 0 },
-      ],
-    },
-  ];
-}
 
 function defaultState() {
   return {
@@ -36,7 +22,7 @@ function defaultState() {
       study: { focusMin: 25, shortMin: 5, longMin: 15, cycles: 4, autoStart: true },
       defaultChecklist: [...DEFAULT_CHECKLIST],
     },
-    workouts: defaultWorkouts(),
+    workouts: programWorkouts(),
     activeWorkoutId: null,
     sessions: [],
   };
@@ -143,9 +129,24 @@ export function blankWorkout() {
   return {
     id: uid(),
     name: 'New workout',
+    goal: '',
     checklist: [...state.settings.defaultChecklist],
-    exercises: [{ id: uid(), name: 'Exercise 1', sets: 3, workSec: 45, restSec: 60, targetReps: 10 }],
+    exercises: [{ id: uid(), name: 'Exercise 1', sets: 3, workSec: 45, restSec: 60, targetReps: 10, cue: '' }],
   };
+}
+
+/**
+ * Add any program workouts that aren't already here, matched on programId, so
+ * it's safe to run twice. Your own workouts and your whole log are untouched;
+ * edits you've made to a stage you already have are kept.
+ */
+export function installProgram() {
+  const have = new Set(state.workouts.map((w) => w.programId).filter(Boolean));
+  const missing = programWorkouts().filter((w) => !have.has(w.programId));
+  state.workouts.push(...missing);
+  if (!state.activeWorkoutId) state.activeWorkoutId = state.workouts[0]?.id ?? null;
+  save();
+  return missing.length;
 }
 
 /* ── import / export ──────────────────────────────────────────────────── */

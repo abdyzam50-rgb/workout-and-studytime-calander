@@ -14,6 +14,7 @@ export function initEditor() {
   Object.assign(dom, {
     dialog: $('#editor'),
     name: $('#ed-name'),
+    goal: $('#ed-goal'),
     exercises: $('#ed-exercises'),
     addEx: $('#ed-add-ex'),
     checklist: $('#ed-checklist'),
@@ -33,6 +34,7 @@ export function initEditor() {
       workSec: 45,
       restSec: 60,
       targetReps: 10,
+      cue: '',
     });
     renderExercises();
   });
@@ -66,6 +68,7 @@ export function openEditor(workout, options = {}) {
   isNew = options.isNew ?? false;
   onClose = options.onClose ?? (() => {});
   dom.name.value = workout.name;
+  dom.goal.value = workout.goal || '';
   dom.remove.hidden = isNew || state.workouts.length <= 1;
   renderExercises();
   renderChecklist();
@@ -97,7 +100,19 @@ function renderExercises() {
       renderExercises();
     });
 
+    const cueInput = el('input', {
+      type: 'text',
+      class: 'ex-cue',
+      value: exercise.cue || '',
+      maxLength: 160,
+      placeholder: 'Cue shown while the set runs (tempo, form, what to watch)',
+    });
+    cueInput.addEventListener('input', () => {
+      exercise.cue = cueInput.value;
+    });
+
     card.append(el('div', { class: 'ex-top' }, [nameInput, up, del]));
+    card.append(cueInput);
     card.append(
       el('div', { class: 'ex-nums' }, [
         numField('Sets', exercise, 'sets', 1, 20),
@@ -163,6 +178,7 @@ function commit() {
     return;
   }
   draft.name = name;
+  draft.goal = dom.goal.value.trim();
   draft.exercises = draft.exercises.map((e) => ({ ...e, name: e.name.trim() || 'Exercise' }));
   saveWorkout(draft);
   dom.dialog.close();

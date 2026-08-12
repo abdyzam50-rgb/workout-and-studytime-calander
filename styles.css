@@ -187,7 +187,11 @@ main { max-width: 1180px; margin: 0 auto; padding: 1.4rem 1.1rem 4rem; }
 }
 .now-next { text-align: center; }
 .now { font-size: 1.25rem; font-weight: 600; }
-.next { color: var(--muted); font-size: .88rem; margin-top: .25rem; }
+.next { color: var(--muted); font-size: .88rem; margin-top: .25rem; max-width: 46ch; margin-inline: auto; }
+.goal {
+  margin: 0; max-width: 52ch; text-align: center; font-size: .85rem; color: var(--muted);
+  background: var(--surface-2); border-left: 3px solid var(--accent); border-radius: 9px; padding: .55rem .8rem;
+}
 
 .checklist-card {
   width: 100%; border: 1px solid var(--accent); border-radius: var(--radius);
@@ -277,6 +281,9 @@ main { max-width: 1180px; margin: 0 auto; padding: 1.4rem 1.1rem 4rem; }
 .ex-card { background: var(--surface-2); border-radius: 11px; padding: .7rem; display: grid; gap: .5rem; }
 .ex-card .ex-top { display: flex; gap: .4rem; }
 .ex-card .ex-top input { flex: 1; padding: .45rem .6rem; border-radius: 9px; border: 1px solid var(--line); background: var(--surface); }
+.ex-cue { width: 100%; padding: .4rem .6rem; border-radius: 9px; border: 1px dashed var(--line); background: var(--surface); font-size: .84rem; }
+.goal-field { display: flex; flex-direction: column; gap: .3rem; font-size: .8rem; color: var(--muted); }
+.goal-field input { padding: .5rem .7rem; border-radius: 9px; border: 1px solid var(--line); background: var(--bg); font-size: .9rem; color: var(--text); }
 .ex-nums { display: grid; grid-template-columns: repeat(4, 1fr); gap: .4rem; }
 .ex-nums label { font-size: .74rem; color: var(--muted); display: flex; flex-direction: column; gap: .2rem; }
 .ex-nums input { padding: .35rem .45rem; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); font-family: var(--mono); width: 100%; }

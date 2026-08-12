@@ -29,6 +29,17 @@ things off early doesn't cut your rest short — but an unfinished checklist hol
 the workout at 0:00 until you deal with it. The same card is where you log reps,
 weight and RPE for the set you just did.
 
+- It ships with a **staged pushup program** — a warm-up, six push stages from
+  knee pushups to 30 in a row, and an alternating pull/legs day. See
+  [ROUTINE.md](ROUTINE.md) for the plan and how to move between stages. Fresh
+  installs start with it; **Settings → Load the training program** adds it to an
+  existing setup without touching your log.
+- Each workout carries a goal line — the standard for graduating to the next
+  stage — shown under the timer before you start.
+- The work clock is a ceiling, not a target: on rep work, finish your reps and
+  press **Set done →** to go straight to rest. Only holds run to zero.
+- Exercises can carry a cue ("5 seconds down, knees to reset") that shows while
+  the set is running.
 - Workouts are built in the editor: exercises with sets, work seconds, rest
   seconds and a target rep count, reorderable with the ↑ button.
 - The checklist is per-workout. New workouts start from the default list you keep
@@ -80,6 +91,7 @@ js/storage.js   the single localStorage blob and everything that touches it
 js/timer.js     deadline-based countdown (survives backgrounded tabs)
 js/study.js     the focus/break state machine
 js/workout.js   the set → checklist → rest state machine
+js/program.js   the built-in training program (data only)
 js/editor.js    workout editor dialog
 js/calendar.js  month grid and stats
 js/notify.js    chimes, notifications, wake lock, toasts

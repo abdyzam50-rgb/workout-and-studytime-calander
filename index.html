@@ -116,6 +116,7 @@
       <div class="now" id="workout-now">—</div>
       <div class="next" id="workout-next"></div>
     </div>
+    <p class="goal" id="workout-goal" hidden></p>
 
     <div class="controls">
       <button id="workout-start" class="btn btn-primary btn-lg">Start</button>
@@ -202,8 +203,11 @@
     </div>
 
     <h2>Your data</h2>
-    <p class="hint">Everything lives in this browser's local storage. Nothing is uploaded anywhere.</p>
+    <p class="hint">Everything lives in this browser's local storage. Nothing is uploaded anywhere.
+      Loading the training program adds any of its workouts you're missing and leaves everything
+      else — including your log — alone.</p>
     <div class="row">
+      <button id="data-program" class="btn btn-sm">Load the training program</button>
       <button id="data-export" class="btn btn-sm">Export JSON</button>
       <button id="data-import" class="btn btn-sm">Import JSON</button>
       <button id="data-clear" class="btn btn-sm btn-danger">Erase everything</button>
@@ -223,6 +227,10 @@
     </header>
 
     <div class="editor-body">
+      <label class="goal-field">
+        <span>Goal / when to move on</span>
+        <input id="ed-goal" type="text" maxlength="160" placeholder="e.g. Move up when this hits 3×15 clean">
+      </label>
       <h3>Exercises</h3>
       <div class="ex-list" id="ed-exercises"></div>
       <button type="button" class="btn btn-sm" id="ed-add-ex">+ Add exercise</button>

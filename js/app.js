@@ -1,8 +1,14 @@
 // Boots the app: tab routing, theme, global settings, data import/export.
 
-import { state, save, exportJSON, importJSON, eraseAll } from './storage.js';
+import { state, save, exportJSON, importJSON, eraseAll, installProgram } from './storage.js';
 import { initStudy, refreshStats as refreshStudy, studyRunning, toggleStudy } from './study.js';
-import { initWorkout, refreshStats as refreshWorkout, workoutRunning, toggleWorkout } from './workout.js';
+import {
+  initWorkout,
+  refreshStats as refreshWorkout,
+  refreshWorkoutList,
+  workoutRunning,
+  toggleWorkout,
+} from './workout.js';
 import { initCalendar, renderCalendar } from './calendar.js';
 import { initEditor, renderList } from './editor.js';
 import { askNotifyPermission, toast } from './notify.js';
@@ -88,6 +94,13 @@ function initSettings() {
 }
 
 function initDataButtons() {
+  $('#data-program').addEventListener('click', () => {
+    const added = installProgram();
+    refreshWorkoutList();
+    refreshWorkout();
+    toast(added ? `Added ${added} workout${added === 1 ? '' : 's'}` : 'Already got all of them');
+  });
+
   $('#data-export').addEventListener('click', () => {
     const blob = new Blob([exportJSON()], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
