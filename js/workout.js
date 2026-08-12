@@ -1,4 +1,9 @@
-// Workout side: timed sets with a checklist gate between every one of them.
+// Workout side. Each workout runs one of two ways:
+//
+//   tick mode (the default) — the workout is a list you check off, one line per
+//     exercise. Lives in ticklist.js.
+//   timer mode — every set and rest runs on the clock, with a form checklist
+//     gating the move to the next set. That's the state machine below.
 //
 // Stages: idle → ready → work → (rest | hold) → work … → done
 //   work  — the set itself is timed
@@ -10,6 +15,7 @@ import { Timer, formatClock, formatDuration } from './timer.js';
 import { chime, notify, keepAwake, toast, unlockAudio } from './notify.js';
 import { $, el, clear, setRing, clockTime } from './ui.js';
 import { openEditor } from './editor.js';
+import { initTickList, renderTickList, resetTickList, tickListBusy } from './ticklist.js';
 
 const READY_SEC = 5;
 
@@ -30,6 +36,9 @@ export function initWorkout({ onSessionLogged = () => {} } = {}) {
     select: $('#workout-select'),
     edit: $('#workout-edit'),
     new: $('#workout-new'),
+    mode: $('#workout-mode'),
+    timerPanel: $('#timer-mode'),
+    tickPanel: $('#tick-mode'),
     clock: $('#workout-clock'),
     ring: $('#workout-ring'),
     status: $('#workout-status'),
@@ -56,8 +65,11 @@ export function initWorkout({ onSessionLogged = () => {} } = {}) {
   dom.select.addEventListener('change', () => {
     state.activeWorkoutId = dom.select.value;
     save();
+    resetTickList();
     reset();
+    applyMode();
   });
+  dom.mode.addEventListener('click', switchMode);
   dom.edit.addEventListener('click', () => {
     const workout = activeWorkout();
     if (workout) openEditor(structuredClone(workout), { isNew: false, onClose: afterEdit });
@@ -72,14 +84,59 @@ export function initWorkout({ onSessionLogged = () => {} } = {}) {
   dom.reset.addEventListener('click', () => reset(true));
   dom.continue.addEventListener('click', resolveChecklist);
 
+  initTickList({
+    onSessionLogged: () => {
+      refreshStats();
+      onLogged();
+    },
+  });
+
   renderWorkoutOptions();
   reset();
+  applyMode();
   refreshStats();
 }
 
 function afterEdit() {
   renderWorkoutOptions();
+  resetTickList();
   reset();
+  applyMode();
+}
+
+/* ── which mode this workout runs in ──────────────────────────────────── */
+
+// Anything without an explicit mode is a tick list — that's the default.
+const workoutMode = () => (activeWorkout()?.mode === 'timer' ? 'timer' : 'checklist');
+
+function applyMode() {
+  const ticks = workoutMode() === 'checklist';
+  dom.tickPanel.hidden = !ticks;
+  dom.timerPanel.hidden = ticks;
+  dom.mode.textContent = ticks ? '☑ Ticks' : '⏱ Timer';
+  if (ticks) renderTickList();
+  else render();
+  renderGoal();
+}
+
+function switchMode() {
+  const workout = activeWorkout();
+  if (!workout) return;
+  if (stage !== 'idle' && stage !== 'done' && !confirm('Switch mode and drop the running workout?')) return;
+  if (tickListBusy() && !confirm('Switch mode and drop the ticks you have so far?')) return;
+  workout.mode = workoutMode() === 'checklist' ? 'timer' : 'checklist';
+  save();
+  resetTickList();
+  reset();
+  applyMode();
+}
+
+function renderGoal() {
+  const workout = activeWorkout();
+  // In timer mode the graduation rule is only useful before you start.
+  const show = workout?.goal && (workoutMode() === 'checklist' || stage === 'idle' || stage === 'done');
+  dom.goal.hidden = !show;
+  if (show) dom.goal.textContent = workout.goal;
 }
 
 /* ── plan ─────────────────────────────────────────────────────────────── */
@@ -346,10 +403,7 @@ function render() {
           : 'Last set — finish strong';
   }
 
-  // The stage's graduation rule is only useful before you start.
-  const goal = (stage === 'idle' || stage === 'done') && workout?.goal;
-  dom.goal.hidden = !goal;
-  if (goal) dom.goal.textContent = workout.goal;
+  renderGoal();
 
   if (!dom.card.hidden) updateChecklistState();
   renderProgress();
@@ -431,14 +485,17 @@ function renderLog() {
   }
 }
 
+/** Anything in flight that would be lost on a reload. */
 export function workoutRunning() {
-  return timer.running;
+  return timer.running || tickListBusy();
 }
 
 export function toggleWorkout() {
+  if (workoutMode() === 'checklist') return; // nothing for space to start here
   toggle();
 }
 
 export function refreshWorkoutList() {
   renderWorkoutOptions();
+  applyMode();
 }

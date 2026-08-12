@@ -74,16 +74,21 @@ where the progress lives — the number is just what falls out at the end.
 
 ## Using it in the app
 
+Every stage is a **tick list**: five or six lines like "Knee Pushup · 3 sets ×
+10 reps", and you check each one off when it's done. Nothing counts at you. Hit
+**Finish** at the end and it lands in the calendar.
+
 - **Warm-up** is its own workout. Run it, then start the day's session.
-- The work clock is a **ceiling, not a target**. On rep work, do your reps and
-  press **Set done →** — the rest timer starts immediately. Only the holds
-  (plank, side plank) are meant to run to zero.
-- The checklist after every set is the point: log the reps you actually did, and
-  answer honestly whether your back is still fine. That last box is your early
-  warning, so don't tick it out of habit.
-- **Log the reps every set.** Stage 6's test set is the number you're chasing,
-  and the calendar tab is where you'll see it move. Guessing from memory in
-  eight weeks won't work.
+- **Put the reps in the box** on the right of each line. Blank logs the target,
+  which is fine on a normal day — but Stage 6's test set is the number you're
+  chasing, and the calendar is where you'll watch it move. Guessing from memory
+  in eight weeks won't work.
+- Planks and side planks have a **▶ 30s** button on their line. Tap it, hold the
+  plank, it chimes when you're done.
+- If you'd rather be pushed through a session on the clock, the **⏱ Timer**
+  button next to the workout name switches that stage over: every set and rest
+  timed, with a form check after each set. Switch back any time — it's a
+  per-workout setting.
 - Side planks and split squats are written as "alternate sides" with double the
   sets — one set per side, swap each time.
 - Adjust anything: **Edit** changes reps, times, cues and the goal line. If 90

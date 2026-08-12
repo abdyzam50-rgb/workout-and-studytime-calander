@@ -97,10 +97,31 @@
   <div class="stage">
     <div class="workout-head">
       <select id="workout-select" aria-label="Choose a workout"></select>
+      <button id="workout-mode" class="btn btn-sm" title="Switch between ticking a list and running the timer">☑ Ticks</button>
       <button id="workout-edit" class="btn btn-sm">Edit</button>
       <button id="workout-new" class="btn btn-sm">New</button>
     </div>
 
+    <p class="goal" id="workout-goal" hidden></p>
+
+    <!-- ── tick mode: the workout as a list you check off ── -->
+    <div class="tick-mode" id="tick-mode" hidden>
+      <div class="tick-head">
+        <div>
+          <div class="now" id="tick-title">Workout</div>
+          <div class="next" id="tick-sub">Tick each line as you finish it.</div>
+        </div>
+        <div class="tick-clock" id="tick-clock">00:00</div>
+      </div>
+      <ul class="ticks" id="tick-items"></ul>
+      <div class="controls">
+        <button id="tick-finish" class="btn btn-primary btn-lg" disabled>Finish workout</button>
+        <button id="tick-clear" class="btn btn-ghost">Clear</button>
+      </div>
+    </div>
+
+    <!-- ── timer mode: runs every set and rest on the clock ── -->
+    <div class="timer-mode" id="timer-mode">
     <div class="dial">
       <svg viewBox="0 0 240 240" class="ring" aria-hidden="true">
         <circle class="ring-track" cx="120" cy="120" r="108"></circle>
@@ -116,7 +137,6 @@
       <div class="now" id="workout-now">—</div>
       <div class="next" id="workout-next"></div>
     </div>
-    <p class="goal" id="workout-goal" hidden></p>
 
     <div class="controls">
       <button id="workout-start" class="btn btn-primary btn-lg">Start</button>
@@ -140,6 +160,7 @@
     </div>
 
     <div class="progress-list" id="workout-progress"></div>
+    </div><!-- /timer-mode -->
   </div>
 
   <aside class="panel">
@@ -230,6 +251,14 @@
       <label class="goal-field">
         <span>Goal / when to move on</span>
         <input id="ed-goal" type="text" maxlength="160" placeholder="e.g. Move up when this hits 3×15 clean">
+      </label>
+
+      <label class="goal-field">
+        <span>How this workout runs</span>
+        <select id="ed-mode">
+          <option value="checklist">Tick a list — check each exercise off as you finish it</option>
+          <option value="timer">Run the timer — every set and rest on the clock</option>
+        </select>
       </label>
       <h3>Exercises</h3>
       <div class="ex-list" id="ed-exercises"></div>

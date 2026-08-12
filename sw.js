@@ -15,6 +15,7 @@ const SHELL = [
   './js/ui.js',
   './js/study.js',
   './js/workout.js',
+  './js/ticklist.js',
   './js/editor.js',
   './js/calendar.js',
 ];

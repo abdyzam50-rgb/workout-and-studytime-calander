@@ -15,6 +15,7 @@ export function initEditor() {
     dialog: $('#editor'),
     name: $('#ed-name'),
     goal: $('#ed-goal'),
+    mode: $('#ed-mode'),
     exercises: $('#ed-exercises'),
     addEx: $('#ed-add-ex'),
     checklist: $('#ed-checklist'),
@@ -69,6 +70,7 @@ export function openEditor(workout, options = {}) {
   onClose = options.onClose ?? (() => {});
   dom.name.value = workout.name;
   dom.goal.value = workout.goal || '';
+  dom.mode.value = workout.mode === 'timer' ? 'timer' : 'checklist';
   dom.remove.hidden = isNew || state.workouts.length <= 1;
   renderExercises();
   renderChecklist();
@@ -179,6 +181,7 @@ function commit() {
   }
   draft.name = name;
   draft.goal = dom.goal.value.trim();
+  draft.mode = dom.mode.value === 'timer' ? 'timer' : 'checklist';
   draft.exercises = draft.exercises.map((e) => ({ ...e, name: e.name.trim() || 'Exercise' }));
   saveWorkout(draft);
   dom.dialog.close();

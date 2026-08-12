@@ -20,14 +20,43 @@ long break once you've done a full set of them.
 
 ## Workout side
 
-Pick a workout, hit start, and it runs the whole thing: a 5-second lead-in, then
-each set timed, then rest, all the way to the last set.
+Every workout runs one of two ways. The button next to the workout name switches
+between them, per workout, and remembers your choice.
 
-**After every single set the checklist appears and the workout will not move on
-until you've ticked all of it.** Rest keeps counting down underneath, so ticking
-things off early doesn't cut your rest short — but an unfinished checklist holds
-the workout at 0:00 until you deal with it. The same card is where you log reps,
-weight and RPE for the set you just did.
+### ☑ Ticks — the default
+
+The workout is a list you check off, one line per exercise:
+
+```
+☑  Knee Pushup          3 sets × 10 reps                    [ 10 ]
+☐  Plank Hold           3 × 30s hold                        [ ▶ 30s ]
+```
+
+Do the thing, tick the line, move on. Nothing is counting at you. A session
+clock starts quietly on your first tick so the log still gets a duration, and
+**Finish** writes the whole session — every ticked exercise, expanded into its
+sets — to the calendar.
+
+- The box on the right of each line takes the reps you actually managed. Leave
+  it blank and it logs the target instead.
+- Timed holds get a **▶ 30s** button that counts down and chimes, so planks
+  don't need a separate timer. Tap it again to cancel.
+- **Clear** wipes the ticks and starts the workout over.
+
+### ⏱ Timer — every set on the clock
+
+Hit start and it runs the whole thing: a 5-second lead-in, then each set timed,
+then rest, all the way to the last set. **After every single set a form
+checklist appears and the workout will not move on until you've ticked all of
+it.** Rest keeps counting down underneath, so ticking things off early doesn't
+cut your rest short — but an unfinished checklist holds the workout at 0:00
+until you deal with it. That card is also where reps, weight and RPE go.
+
+Useful for interval work and for days you want to be pushed. The work clock is a
+ceiling, not a target: finish your reps and press **Set done →** to go straight
+to rest.
+
+### Both modes
 
 - It ships with a **staged pushup program** — a warm-up, six push stages from
   knee pushups to 30 in a row, and an alternating pull/legs day. See
@@ -35,17 +64,13 @@ weight and RPE for the set you just did.
   installs start with it; **Settings → Load the training program** adds it to an
   existing setup without touching your log.
 - Each workout carries a goal line — the standard for graduating to the next
-  stage — shown under the timer before you start.
-- The work clock is a ceiling, not a target: on rep work, finish your reps and
-  press **Set done →** to go straight to rest. Only holds run to zero.
-- Exercises can carry a cue ("5 seconds down, knees to reset") that shows while
-  the set is running.
+  stage — shown above the workout.
+- Exercises can carry a cue ("5 seconds down, knees to reset"), shown on the
+  line in tick mode and while the set runs in timer mode.
 - Workouts are built in the editor: exercises with sets, work seconds, rest
-  seconds and a target rep count, reorderable with the ↑ button.
-- The checklist is per-workout. New workouts start from the default list you keep
-  in Settings ("Logged reps and weight", "Form felt solid", "Breathing back to
-  normal", "Water") and you can rewrite it for any workout.
-- The progress strip under the timer fills in a square per completed set.
+  seconds, a target rep count and that cue, reorderable with the ↑ button.
+- The timer-mode form checklist is per-workout. New workouts start from the
+  default list you keep in Settings.
 - Reset mid-session logs the sets you actually did rather than throwing them away.
 
 ## Calendar
@@ -90,7 +115,8 @@ js/app.js       boot, tab routing, theme, settings, import/export
 js/storage.js   the single localStorage blob and everything that touches it
 js/timer.js     deadline-based countdown (survives backgrounded tabs)
 js/study.js     the focus/break state machine
-js/workout.js   the set → checklist → rest state machine
+js/workout.js   mode switching + the set → checklist → rest state machine
+js/ticklist.js  tick mode: the workout as a list you check off
 js/program.js   the built-in training program (data only)
 js/editor.js    workout editor dialog
 js/calendar.js  month grid and stats

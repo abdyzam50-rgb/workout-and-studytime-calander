@@ -130,6 +130,7 @@ export function blankWorkout() {
     id: uid(),
     name: 'New workout',
     goal: '',
+    mode: 'checklist',
     checklist: [...state.settings.defaultChecklist],
     exercises: [{ id: uid(), name: 'Exercise 1', sets: 3, workSec: 45, restSec: 60, targetReps: 10, cue: '' }],
   };
