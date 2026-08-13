@@ -1,7 +1,7 @@
 {
   "name": "Focus & Lift — Study and Workout Timers",
   "short_name": "Focus & Lift",
-  "description": "Pomodoro-style study timers and interval workouts with a checklist after every set.",
+  "description": "Study timers and checklist-driven workouts, in one small offline app.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
@@ -9,6 +9,9 @@
   "background_color": "#0f1015",
   "theme_color": "#12131a",
   "icons": [
-    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml" }
   ]
 }

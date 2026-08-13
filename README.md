@@ -94,6 +94,38 @@ carries this week's totals, your day streak, and all-time numbers.
   can install it to a phone home screen and use it with no signal.
 - Dark and light themes, toggled top-right.
 
+## Putting it on your phone
+
+The app is static files, so GitHub Pages will host it for free and iOS will
+install it from Safari like a real app.
+
+**1. Turn on Pages.** In the repo: **Settings → Pages → Source: Deploy from a
+branch**, pick the branch and folder `/ (root)`, hit Save. Give it a minute and
+your URL is:
+
+```
+https://<your-username>.github.io/workout-and-studytime-calander/
+```
+
+**2. Install it.** Open that URL **in Safari** on the iPhone (not Chrome — only
+Safari can install to the home screen on iOS). Tap the **Share** button, scroll
+to **Add to Home Screen**, then **Add**.
+
+That's it. It opens full screen with no browser chrome, works with no signal,
+and keeps the screen awake through a set.
+
+Two iOS things worth knowing:
+
+- **The installed app has its own storage.** Anything you logged in Safari
+  before installing won't be in it. Log in one place — the home screen icon —
+  and it stays consistent.
+- **Back up now and then.** Settings → Export JSON. Deleting the app takes your
+  history with it.
+
+Notifications need one extra tap: turn them on in Settings *after* installing to
+the home screen, and iOS will ask for permission (it refuses to ask in a normal
+Safari tab).
+
 ## Running it
 
 Open `index.html` in a browser. Because the code is split into ES modules, some

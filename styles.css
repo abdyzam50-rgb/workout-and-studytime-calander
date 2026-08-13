@@ -45,12 +45,17 @@ h2 { font-size: .82rem; text-transform: uppercase; letter-spacing: .09em; color:
 h3 { font-size: .95rem; margin: 1.4rem 0 .6rem; }
 h2:first-child { margin-top: 0; }
 button, input, select { font: inherit; color: inherit; }
+/* kills the tap delay and the grey flash when this is used as a phone app */
+button, label, .tab, .chip { touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
 
 /* ── top bar ────────────────────────────────────────────────────────── */
+/* env() padding keeps the bar clear of the notch and the rounded corners when
+   this is installed to an iPhone home screen; it's 0 everywhere else. */
 .topbar {
   display: flex; align-items: center; gap: 1rem;
-  padding: .7rem 1.1rem;
+  padding: calc(.7rem + env(safe-area-inset-top)) calc(1.1rem + env(safe-area-inset-right))
+           .7rem calc(1.1rem + env(safe-area-inset-left));
   border-bottom: 1px solid var(--line);
   background: var(--surface);
   position: sticky; top: 0; z-index: 20;
@@ -72,7 +77,11 @@ button, input, select { font: inherit; color: inherit; }
 .icon-btn:hover { background: var(--surface-2); }
 
 /* ── layout ─────────────────────────────────────────────────────────── */
-main { max-width: 1180px; margin: 0 auto; padding: 1.4rem 1.1rem 4rem; }
+main {
+  max-width: 1180px; margin: 0 auto;
+  padding: 1.4rem calc(1.1rem + env(safe-area-inset-right))
+           calc(4rem + env(safe-area-inset-bottom)) calc(1.1rem + env(safe-area-inset-left));
+}
 .view { display: none; grid-template-columns: minmax(0, 1fr) 320px; gap: 1.4rem; align-items: start; }
 .view.is-active { display: grid; }
 .view[data-accent="study"] { --accent: var(--study); }
@@ -96,7 +105,10 @@ main { max-width: 1180px; margin: 0 auto; padding: 1.4rem 1.1rem 4rem; }
   .tabs { order: 3; width: 100%; margin-left: 0; justify-content: space-between; }
   /* min-width:0 so four tabs can share a narrow phone without pushing the page wide */
   .tab { flex: 1; min-width: 0; padding: .42rem .35rem; font-size: .86rem; }
-  main { padding: 1rem .7rem 3rem; }
+  main {
+    padding: 1rem calc(.7rem + env(safe-area-inset-right))
+             calc(3rem + env(safe-area-inset-bottom)) calc(.7rem + env(safe-area-inset-left));
+  }
   .stage { padding: 1.1rem; }
 }
 
@@ -329,7 +341,7 @@ main { max-width: 1180px; margin: 0 auto; padding: 1.4rem 1.1rem 4rem; }
 
 /* ── toast ──────────────────────────────────────────────────────────── */
 .toast {
-  position: fixed; left: 50%; bottom: 1.5rem; transform: translate(-50%, 200%);
+  position: fixed; left: 50%; bottom: calc(1.5rem + env(safe-area-inset-bottom)); transform: translate(-50%, 200%);
   background: var(--text); color: var(--bg); padding: .6rem 1.1rem; border-radius: 999px;
   font-size: .88rem; z-index: 50; transition: transform .25s ease; pointer-events: none; max-width: 90vw;
 }

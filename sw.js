@@ -1,11 +1,14 @@
 // Cache the shell so the app still works in a gym basement with no signal.
 
-const CACHE = 'focus-and-lift-v2';
+const CACHE = 'focus-and-lift-v3';
 const SHELL = [
   './',
   './index.html',
   './styles.css',
   './icon.svg',
+  './apple-touch-icon.png',
+  './icon-192.png',
+  './icon-512.png',
   './manifest.webmanifest',
   './js/app.js',
   './js/storage.js',
