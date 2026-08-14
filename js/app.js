@@ -10,6 +10,7 @@ import {
   toggleWorkout,
 } from './workout.js';
 import { initCalendar, renderCalendar } from './calendar.js';
+import { initPlan, refreshPlan } from './plan.js';
 import { initEditor, renderList } from './editor.js';
 import { askNotifyPermission, toast } from './notify.js';
 import { $, $$ } from './ui.js';
@@ -173,6 +174,7 @@ function initServiceWorker() {
 function refreshEverything() {
   refreshStudy();
   refreshWorkout();
+  refreshPlan();
   renderCalendar();
 }
 
@@ -182,6 +184,13 @@ initEditor();
 initStudy({ onSessionLogged: refreshEverything });
 initWorkout({ onSessionLogged: refreshEverything });
 initCalendar();
+initPlan({
+  onPlanChanged: () => {
+    refreshWorkoutList();
+    refreshWorkout();
+    renderCalendar();
+  },
+});
 initSettings();
 initShortcuts();
 initUnloadGuard();

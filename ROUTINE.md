@@ -10,15 +10,24 @@ your back, stop and get it looked at.
 
 ## The week
 
-Never two push days back to back. Warm-up first, every time.
+One on, one off, on a loop — a full day of recovery between every session:
 
-| | Mon | Tue | Wed | Thu | Fri | Sat | Sun |
-|---|---|---|---|---|---|---|---|
-| **Do** | Push | Day B | rest | Push | Day B | rest / walk | rest |
+| Day 1 | Day 2 | Day 3 | Day 4 | then repeat |
+|---|---|---|---|---|
+| **Push** | rest | **Day B** (pull / legs / hips) | rest | → Day 1 |
 
-Three push days a week works too (Mon/Wed/Fri) if Day B keeps getting skipped —
-but don't drop Day B entirely. All pressing and no pulling is how shoulders start
-aching in a couple of months.
+It ignores the calendar week on purpose. A 4-day loop drifts across weekdays,
+which is fine — what matters is the day of rest between sessions, not that
+"Monday is push day". The Calendar tab runs this loop for you and will export it
+to your phone's calendar with alerts.
+
+Warm-up first, every time.
+
+**If you want the pushups to move faster**, drop one rest slot in the app's plan
+editor and it becomes Push → rest → Day B, a 3-day loop. That's about 2.3 push
+sessions a week instead of 1.75. Do that only while nothing aches — the whole
+point of one-on-one-off is that recovery is where the adaptation happens, and a
+tweaked elbow costs more weeks than the extra frequency buys.
 
 ## The push stages
 

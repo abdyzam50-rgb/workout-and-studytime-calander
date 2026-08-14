@@ -21,6 +21,15 @@ function defaultState() {
       wakeLock: true,
       study: { focusMin: 25, shortMin: 5, longMin: 15, cycles: 4, autoStart: true },
       defaultChecklist: [...DEFAULT_CHECKLIST],
+      // One on, one off: push day, rest, day B, rest, repeat.
+      schedule: {
+        enabled: true,
+        startDate: dateKey(),
+        pattern: ['push', 'rest', 'pull-legs', 'rest'],
+        pushStageId: null,
+        time: '18:00',
+        includeRest: true,
+      },
     },
     workouts: programWorkouts(),
     activeWorkoutId: null,
@@ -43,6 +52,7 @@ function hydrate(raw) {
       ...base.settings,
       ...(raw.settings || {}),
       study: { ...base.settings.study, ...((raw.settings || {}).study || {}) },
+      schedule: { ...base.settings.schedule, ...((raw.settings || {}).schedule || {}) },
       defaultChecklist: (raw.settings || {}).defaultChecklist || base.settings.defaultChecklist,
     },
     workouts: Array.isArray(raw.workouts) && raw.workouts.length ? raw.workouts : base.workouts,

@@ -2,6 +2,7 @@
 
 import { state, dateKey, streak } from './storage.js';
 import { formatDuration } from './timer.js';
+import { planFor } from './schedule.js';
 import { $, el, clear, clockTime } from './ui.js';
 
 const DOW = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
@@ -82,9 +83,18 @@ export function renderCalendar() {
     if (key === todayKey) classes.push('is-today');
     if (key === selected) classes.push('is-selected');
 
+    // a planned-but-not-yet-done training day gets a hollow dot
+    const planned = planFor(key);
+    if (planned?.kind === 'workout') classes.push('is-planned');
+    if (planned?.kind === 'rest') classes.push('is-rest');
+
     const marks = el('div', { class: 'marks' }, [
       totalsForDay?.studyMin ? el('i', { class: 'dot study' }) : null,
-      totalsForDay?.workouts ? el('i', { class: 'dot workout' }) : null,
+      totalsForDay?.workouts
+        ? el('i', { class: 'dot workout' })
+        : planned?.kind === 'workout'
+          ? el('i', { class: 'dot workout is-todo', title: planned.workout.name })
+          : null,
     ]);
     const fill = Math.min(100, ((totalsForDay?.studyMin || 0) / DAILY_GOAL_MIN) * 100);
     const bar = fill > 0 ? el('div', { class: 'bar', title: `${Math.round(totalsForDay.studyMin)} min studied` },
@@ -107,6 +117,14 @@ function renderDetail(totals) {
   const day = new Date(`${selected}T00:00:00`);
   const heading = day.toLocaleDateString([], { weekday: 'long', day: 'numeric', month: 'long' });
   dom.detail.append(el('h3', {}, heading));
+
+  const planned = planFor(selected);
+  if (planned) {
+    dom.detail.append(
+      el('p', { class: `hint plan-line ${planned.kind}` },
+        planned.kind === 'rest' ? 'Planned: rest day' : `Planned: ${planned.workout.name}`),
+    );
+  }
 
   const sessions = state.sessions
     .filter((s) => s.date === selected)

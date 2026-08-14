@@ -73,6 +73,40 @@ to rest.
   default list you keep in Settings.
 - Reset mid-session logs the sets you actually did rather than throwing them away.
 
+## The plan, and getting reminded
+
+The **Calendar** tab carries a repeating loop of days — the default is one on,
+one off: **Push → rest → Day B → rest**, forever. Set the day it starts and the
+app works out every future day from there.
+
+- Planned training days show a **hollow dot** in the month grid; it fills in once
+  you've actually logged something.
+- The workout tab shows a banner for today — the workout on the plan with a
+  **Load it** button, or a rest-day note.
+- The **Push — current stage** slot follows you up the program: change the *Push
+  stage* dropdown when you graduate and every future day updates with it.
+- The loop is editable. Want more push frequency at the cost of a rest day? Drop
+  a rest slot and it becomes a 3-day cycle.
+
+### Reminders on a phone
+
+Be clear-eyed about this: **a web app cannot notify you when it isn't open.**
+Real background push needs a server, and this app has none by design. The app
+will notify you when you open it on a training day, and its timers notify you
+while it's running — that's the honest limit.
+
+So the reminders live in your phone's own calendar instead. **Add to phone
+calendar (.ics)** on the Calendar tab writes six months of the plan to a file:
+
+- training days at your chosen time, with the exercise list in the notes and an
+  alert 15 minutes before,
+- rest days as all-day entries that don't block time.
+
+On an iPhone, tap the downloaded file → **Add All**. Those alerts fire whether
+the app is open, closed, or deleted. Re-export whenever you change the loop or
+move up a stage — same-day entries are replaced rather than duplicated, since
+each event's ID is derived from its date.
+
 ## Calendar
 
 A month grid of everything: an indigo dot for a day you studied, an orange one for
@@ -151,6 +185,8 @@ js/workout.js   mode switching + the set → checklist → rest state machine
 js/ticklist.js  tick mode: the workout as a list you check off
 js/program.js   the built-in training program (data only)
 js/editor.js    workout editor dialog
+js/schedule.js  the repeating plan, and the .ics builder
+js/plan.js      plan editor + today's banner
 js/calendar.js  month grid and stats
 js/notify.js    chimes, notifications, wake lock, toasts
 sw.js           offline cache

@@ -1,6 +1,6 @@
 // Cache the shell so the app still works in a gym basement with no signal.
 
-const CACHE = 'focus-and-lift-v3';
+const CACHE = 'focus-and-lift-v4';
 const SHELL = [
   './',
   './index.html',
@@ -19,6 +19,8 @@ const SHELL = [
   './js/study.js',
   './js/workout.js',
   './js/ticklist.js',
+  './js/schedule.js',
+  './js/plan.js',
   './js/editor.js',
   './js/calendar.js',
 ];

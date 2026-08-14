@@ -101,6 +101,8 @@
 <!-- ══════════════════════════ WORKOUT ══════════════════════════ -->
 <section id="view-workout" class="view" data-accent="workout">
   <div class="stage">
+    <div class="today-plan" id="today-plan" hidden></div>
+
     <div class="workout-head">
       <select id="workout-select" aria-label="Choose a workout"></select>
       <button id="workout-mode" class="btn btn-sm" title="Switch between ticking a list and running the timer">☑ Ticks</button>
@@ -192,12 +194,32 @@
     <div class="cal-grid" id="cal-grid"></div>
     <div class="legend">
       <span><i class="dot study"></i> study</span>
-      <span><i class="dot workout"></i> workout</span>
+      <span><i class="dot workout"></i> workout done</span>
+      <span><i class="dot workout is-todo"></i> planned</span>
     </div>
     <div class="day-detail" id="cal-detail"><p class="empty">Pick a day to see what you did.</p></div>
   </div>
 
   <aside class="panel">
+    <h2>Your plan</h2>
+    <label class="switch"><input id="plan-enabled" type="checkbox"> <span>Follow a repeating loop</span></label>
+    <div id="plan-body">
+      <ul class="editable-list" id="plan-pattern"></ul>
+      <div class="row">
+        <select id="plan-add-slot" aria-label="Day to add"></select>
+        <button id="plan-add" class="btn btn-sm">Add day</button>
+      </div>
+      <div class="field-grid">
+        <label>Loop starts <input id="plan-start" type="date"></label>
+        <label>Push stage <select id="plan-stage"></select></label>
+        <label>Reminder time <input id="plan-time" type="time"></label>
+      </div>
+      <label class="switch"><input id="plan-rest-events" type="checkbox"> <span>Include rest days in the calendar file</span></label>
+      <button id="plan-ics" class="btn btn-sm">Add to phone calendar (.ics)</button>
+      <p class="hint">Downloads 6 months of your plan. On iPhone, open it and tap
+        <b>Add All</b> — those alerts fire whether this app is open or not.</p>
+    </div>
+
     <h2>This week</h2>
     <div class="today-strip vertical">
       <div class="stat"><b id="wk-study">0m</b><span>studied</span></div>
